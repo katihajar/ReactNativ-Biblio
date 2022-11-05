@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-
-import axios from 'axios';
 import {
   StyleSheet,
   ImageBackground,
@@ -228,8 +226,11 @@ const Register = (props) => {
                           >
                             Get Started
                           </Text>
+
                         </Button>
+                        
                       </Block>
+                
                     </Block>
                   </Block>
                 </Block>
