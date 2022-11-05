@@ -191,7 +191,7 @@ const Register = (props) => {
                       <Block center>
                         <Button color="primary" round style={styles.createButton} onPress={() => {
                           console.log("login");
-                          fetch('http://10.214.43.93:8036/api/auth/signup', {
+                          fetch('http://172.30.48.1:8036/api/auth/signup', {
                             method: 'POST',
                             headers: {
                               Accept: 'application/json',
