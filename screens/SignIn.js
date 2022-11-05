@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {
   StyleSheet,
   ImageBackground,
@@ -13,13 +14,62 @@ import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');
+const username = "";
+const password = "";
 
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
+/*handleSubmit = f => {
+  axios.post('http://10.214.41.171:8036/api/auth/login', {
+    username: 'ouma',
+    password: 'ouma.jj'
+  })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}*/
+
 class Register extends React.Component {
+  onChangeNameHandler = (username1) => {
+    username = username1;
+  };
+  onChangePassHandler = (password1) => {
+    password = password1;
+  };
+   /* handleSubmit = e => {
+       fetch('http://10.214.41.171:8036/api/auth/login', {
+          method: 'POST',
+          headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json'
+       },
+          body:{username:"ouma",password:"ouma.jj"}
+       })
+       .then((response) => response.json())
+       .catch((error) => {
+          console.error(error);
+       });
+ }
+ */
+ handleSubmit = f => {
+  axios.post('http://10.214.41.171:8036/api/auth/login', {
+    username: 'ouma',
+    password: 'ouma.jj'
+  })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
   render() {
+    const { navigation } = this.props;
     return (
       <DismissKeyboard>
         <Block flex middle>
@@ -41,7 +91,7 @@ class Register extends React.Component {
                         color="#333"
                         size={24}
                       >
-                        Sign In
+                        Sign Inn
                       </Text>
                     </Block>
 
@@ -98,11 +148,12 @@ class Register extends React.Component {
                     <Block center flex={0.9}>
                       <Block flex space="between">
                         <Block>
-                          
-                         
+
+
                           <Block width={width * 0.8}>
                             <Input
-                              placeholder="Email"
+                              placeholder="Username"
+                              name="username"
                               style={styles.inputs}
                               iconContent={
                                 <Icon
@@ -110,6 +161,7 @@ class Register extends React.Component {
                                   color="#ADB5BD"
                                   name="email-852x"
                                   family="NowExtra"
+                                  onChangeText={this.onChangeNameHandler}
                                   style={styles.inputIcons}
                                 />
                               }
@@ -118,12 +170,13 @@ class Register extends React.Component {
                           <Block width={width * 0.8}>
                             <Input
                               placeholder="Password"
+                              name="password"
                               style={styles.inputs}
                               iconContent={
                                 <Icon
                                   size={16}
                                   color="#ADB5BD"
-                                  name="password"
+                                  name="lock-circle-open2x"
                                   family="NowExtra"
                                   style={styles.inputIcons}
                                 />
@@ -131,7 +184,7 @@ class Register extends React.Component {
                             />
                           </Block>
                           <Block
-                            style={{ marginVertical: theme.SIZES.BASE, marginLeft: 15}}
+                            style={{ marginVertical: theme.SIZES.BASE, marginLeft: 15 }}
                             row
                             width={width * 0.75}
                           >
@@ -151,13 +204,25 @@ class Register extends React.Component {
                           </Block>
                         </Block>
                         <Block center>
-                          <Button color="primary" round style={styles.createButton}>
+                          <Button color="primary" round style={styles.createButton} onPress={this.handleSubmit} >
                             <Text
                               style={{ fontFamily: 'montserrat-bold' }}
                               size={14}
                               color={nowTheme.COLORS.WHITE}
                             >
                               Get Started
+                            </Text>
+                          </Button>
+                          <Button
+                            shadowless
+                            style={{ backgroundColor: nowTheme.COLORS.WHITE }}
+                            onPress={() => navigation.navigate('Account')}
+                          >
+                            <Text
+                              style={{ fontFamily: 'montserrat-bold', fontSize: 14 }}
+                              color={theme.COLORS.BLACK}
+                            >
+                              GET STARTED? SignUp
                             </Text>
                           </Button>
                         </Block>

@@ -85,9 +85,6 @@ function AccountStack(props) {
         name="Account"
         component={Register}
         options={{
-          header: ({ navigation, scene }) => (
-            <Header transparent title="Create Account" navigation={navigation} scene={scene} />
-          ),
           headerTransparent: true,
         }}
       />
@@ -173,9 +170,6 @@ function signInStack(props) {
         name="SignIn"
         component={SignIn}
         options={{
-          header: ({ navigation, scene }) => (
-            <Header transparent title="Sign in to your Account" navigation={navigation} scene={scene} />
-          ),
           headerTransparent: true,
         }}
       />
@@ -274,6 +268,8 @@ export default function OnboardingStack(props) {
           headerTransparent: true,
         }}
       />
+      <Stack.Screen name="SignIn" component={signInStack} />
+      <Stack.Screen name="Account" component={AccountStack} />
       <Stack.Screen name="App" component={AppStack} />
     </Stack.Navigator>
   );

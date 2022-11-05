@@ -18,8 +18,27 @@ const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
+const handleSubmit = e => {
+  e.preventDefault();
+  if (user.password === user.retype_password){
+      axios({
+          method: "post",
+          url: "http://localhost:8080/api/user/save",
+          data: {[e.target.name]: e.target.value}
+        }).then(function (response) {
+          console.log("success")
+        }).catch(response => {
+          console.log("failure")
+        })
+  }else{
+      alert("password ressaisi incorrect")
+  }
+  
+}
+
 class Register extends React.Component {
   render() {
+    const { navigation } = this.props;
     return (
       <DismissKeyboard>
         <Block flex middle>
@@ -82,7 +101,7 @@ class Register extends React.Component {
                       />
                     </Block>
                   </Block>
-                  <Block flex={0.1} middle>
+                  <Block  middle>
                     <Text
                       style={{
                         fontFamily: 'montserrat-regular',
@@ -98,7 +117,7 @@ class Register extends React.Component {
                     <Block center flex={0.9}>
                       <Block flex space="between">
                         <Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                          <Block width={width * 0.8} >
                             <Input
                               placeholder="First Name"
                               style={styles.inputs}
@@ -151,7 +170,7 @@ class Register extends React.Component {
                                 <Icon
                                   size={16}
                                   color="#ADB5BD"
-                                  name="phone"
+                                  name="mobile2x"
                                   family="NowExtra"
                                   style={styles.inputIcons}
                                 />
@@ -166,7 +185,7 @@ class Register extends React.Component {
                                 <Icon
                                   size={16}
                                   color="#ADB5BD"
-                                  name="password"
+                                  name="lock-circle-open2x"
                                   family="NowExtra"
                                   style={styles.inputIcons}
                                 />
@@ -194,7 +213,7 @@ class Register extends React.Component {
                           </Block>
                         </Block>
                         <Block center>
-                          <Button color="primary" round style={styles.createButton}>
+                          <Button color="primary" round style={styles.createButton}   onPress={() => navigation.navigate('SignIn')}>
                             <Text
                               style={{ fontFamily: 'montserrat-bold' }}
                               size={14}
