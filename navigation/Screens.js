@@ -157,7 +157,7 @@ function HomeStack(props) {
     </Stack.Navigator>
   );
 }
-function signInStack(props) {
+function SignInStack(props) {
   return (
     <Stack.Navigator
       initialRouteName="SignIn"
@@ -235,20 +235,6 @@ function AppStack(props) {
           headerShown: false,
         }}
       />
-      <Drawer.Screen
-        name="Account"
-        component={AccountStack}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Drawer.Screen
-        name="SignIn"
-        component={signInStack}
-        options={{
-          headerShown: false,
-        }}
-      />
     </Drawer.Navigator>
   );
 }
@@ -268,8 +254,8 @@ export default function OnboardingStack(props) {
           headerTransparent: true,
         }}
       />
-      <Stack.Screen name="SignIn" component={signInStack} />
-      <Stack.Screen name="Account" component={AccountStack} />
+      <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="Account" component={Register} />
       <Stack.Screen name="App" component={AppStack} />
     </Stack.Navigator>
   );

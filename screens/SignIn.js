@@ -1,5 +1,5 @@
-import React from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -14,62 +14,19 @@ import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');
-const username = "";
-const password = "";
+
 
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
-/*handleSubmit = f => {
-  axios.post('http://10.214.41.171:8036/api/auth/login', {
-    username: 'ouma',
-    password: 'ouma.jj'
-  })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}*/
 
-class Register extends React.Component {
-  onChangeNameHandler = (username1) => {
-    username = username1;
-  };
-  onChangePassHandler = (password1) => {
-    password = password1;
-  };
-   /* handleSubmit = e => {
-       fetch('http://10.214.41.171:8036/api/auth/login', {
-          method: 'POST',
-          headers: {
-           'Accept': 'application/json',
-           'Content-Type': 'application/json'
-       },
-          body:{username:"ouma",password:"ouma.jj"}
-       })
-       .then((response) => response.json())
-       .catch((error) => {
-          console.error(error);
-       });
- }
- */
- handleSubmit = f => {
-  axios.post('http://10.214.41.171:8036/api/auth/login', {
-    username: 'ouma',
-    password: 'ouma.jj'
-  })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-  render() {
-    const { navigation } = this.props;
+const Register = (props) =>{
+  
+  const { navigation } = props;
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     return (
       <DismissKeyboard>
         <Block flex middle>
@@ -155,13 +112,14 @@ class Register extends React.Component {
                               placeholder="Username"
                               name="username"
                               style={styles.inputs}
+                              onChangeText={newText => setUsername(newText)}
+                              defaultValue={username}
                               iconContent={
                                 <Icon
                                   size={16}
                                   color="#ADB5BD"
                                   name="email-852x"
                                   family="NowExtra"
-                                  onChangeText={this.onChangeNameHandler}
                                   style={styles.inputIcons}
                                 />
                               }
@@ -172,6 +130,8 @@ class Register extends React.Component {
                               placeholder="Password"
                               name="password"
                               style={styles.inputs}
+                              onChangeText={newText => setPassword(newText)}
+                              defaultValue={password}
                               iconContent={
                                 <Icon
                                   size={16}
@@ -204,13 +164,35 @@ class Register extends React.Component {
                           </Block>
                         </Block>
                         <Block center>
-                          <Button color="primary" round style={styles.createButton} onPress={this.handleSubmit} >
+                          <Button color="primary" round style={styles.createButton} onPress={ ()=>{
+                           console.log("login");
+                           fetch('http://10.214.43.93:8036/api/auth/login', {
+                              method: 'POST',
+                              headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify({
+                                username: username,
+                                password: password
+                              })
+                            }) .then((response) => response.json())
+                            .then((data) => {
+                              console.log(data);
+                              if(data !=null){
+                                navigation.navigate('App');
+                              }
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            });
+                          }} >
                             <Text
                               style={{ fontFamily: 'montserrat-bold' }}
                               size={14}
                               color={nowTheme.COLORS.WHITE}
                             >
-                              Get Started
+                              login
                             </Text>
                           </Button>
                           <Button
@@ -237,7 +219,6 @@ class Register extends React.Component {
       </DismissKeyboard>
     );
   }
-}
 
 const styles = StyleSheet.create({
   imageBackgroundContainer: {
