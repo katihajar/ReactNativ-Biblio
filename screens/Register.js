@@ -18,27 +18,11 @@ const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
-const handleSubmit = e => {
-  e.preventDefault();
-  if (user.password === user.retype_password){
-      axios({
-          method: "post",
-          url: "http://localhost:8080/api/user/save",
-          data: {[e.target.name]: e.target.value}
-        }).then(function (response) {
-          console.log("success")
-        }).catch(response => {
-          console.log("failure")
-        })
-  }else{
-      alert("password ressaisi incorrect")
-  }
-  
-}
 
-class Register extends React.Component {
-  render() {
-    const { navigation } = this.props;
+
+const Register = (props) =>{
+  
+  const { navigation } = props;
     return (
       <DismissKeyboard>
         <Block flex middle>
@@ -234,7 +218,7 @@ class Register extends React.Component {
       </DismissKeyboard>
     );
   }
-}
+
 
 const styles = StyleSheet.create({
   imageBackgroundContainer: {

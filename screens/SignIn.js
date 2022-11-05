@@ -21,7 +21,7 @@ const DismissKeyboard = ({ children }) => (
 );
 
 
-const Register = (props) =>{
+const SignIn = (props) =>{
   
   const { navigation } = props;
 
@@ -298,4 +298,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Register;
+export default SignIn;
