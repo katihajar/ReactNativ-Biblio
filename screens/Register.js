@@ -1,4 +1,6 @@
 import React from 'react';
+
+import axios from 'axios';
 import {
   StyleSheet,
   ImageBackground,
@@ -17,8 +19,6 @@ const { width, height } = Dimensions.get('screen');
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
-
-
 
 const Register = (props) =>{
   
@@ -97,10 +97,12 @@ const Register = (props) =>{
                       or be classical
                     </Text>
                   </Block>
+                  
                   <Block flex={1} middle space="between">
                     <Block center flex={0.9}>
                       <Block flex space="between">
                         <Block>
+                          
                           <Block width={width * 0.8} >
                             <Input
                               placeholder="First Name"

@@ -113,7 +113,6 @@ const SignIn = (props) =>{
                               name="username"
                               style={styles.inputs}
                               onChangeText={newText => setUsername(newText)}
-                              defaultValue={username}
                               iconContent={
                                 <Icon
                                   size={16}
@@ -131,7 +130,6 @@ const SignIn = (props) =>{
                               name="password"
                               style={styles.inputs}
                               onChangeText={newText => setPassword(newText)}
-                              defaultValue={password}
                               iconContent={
                                 <Icon
                                   size={16}
@@ -179,7 +177,7 @@ const SignIn = (props) =>{
                             }) .then((response) => response.json())
                             .then((data) => {
                               console.log(data);
-                              if(data !=null){
+                              if(data.accessToken !=null){
                                 navigation.navigate('App');
                               }
                             })
