@@ -20,6 +20,7 @@ import SettingsScreen from '../screens/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
+import FormDoc from '../screens/FormDoc';
 
 const { width } = Dimensions.get('screen');
 
@@ -139,7 +140,7 @@ function HomeStack(props) {
         component={Home}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="Home" search options navigation={navigation} scene={scene} />
+            <Header title="Home" search navigation={navigation} scene={scene} />
           ),
           cardStyle: { backgroundColor: '#FFFFFF' },
         }}
@@ -257,6 +258,7 @@ export default function OnboardingStack(props) {
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="Account" component={Register} />
       <Stack.Screen name="App" component={AppStack} />
+      <Stack.Screen name="FormDoc" component={FormDoc} />
     </Stack.Navigator>
   );
 }

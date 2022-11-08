@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
 import { Button, Icon, Input } from '../components';
@@ -29,17 +30,17 @@ const SignIn = (props) =>{
     const [password, setPassword] = useState('');
     return (
       <DismissKeyboard>
-        <Block flex middle>
+        <Block flex >
           <ImageBackground
             source={Images.RegisterBackground}
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
           >
-            <Block flex middle>
+            <Block flex style={{ paddingHorizontal: theme.SIZES.BASE * 1.3}} >
               <Block style={styles.registerContainer}>
                 <Block flex space="evenly">
-                  <Block flex={0.4} middle style={styles.socialConnect}>
-                    <Block flex={0.5} middle>
+                  <Block flex={0.4} style={{ paddingHorizontal: theme.SIZES.BASE ,backgroundColor: nowTheme.COLORS.WHITE}} >
+                    <Block flex={0.5} style={{ paddingHorizontal: theme.SIZES.BASE }}>
                       <Text
                         style={{
                           fontFamily: 'montserrat-regular',
@@ -52,7 +53,7 @@ const SignIn = (props) =>{
                       </Text>
                     </Block>
 
-                    <Block flex={0.5} row middle space="between" style={{ marginBottom: 18 }}>
+                    <Block flex={0.5} row tyle={{paddingTop: theme.SIZES.BASE }} space="between" style={{ marginBottom: 18 }}>
                       <GaButton
                         round
                         onlyIcon
@@ -89,7 +90,7 @@ const SignIn = (props) =>{
                       />
                     </Block>
                   </Block>
-                  <Block flex={0.1} middle>
+                  <Block flex={0.1} tyle={{paddingTop: theme.SIZES.BASE }}>
                     <Text
                       style={{
                         fontFamily: 'montserrat-regular',
@@ -101,7 +102,7 @@ const SignIn = (props) =>{
                       or be classical
                     </Text>
                   </Block>
-                  <Block flex={1} middle space="between">
+                  <Block flex={1} tyle={{paddingTop: theme.SIZES.BASE }} space="between">
                     <Block center flex={0.9}>
                       <Block flex space="between">
                         <Block>
@@ -164,7 +165,7 @@ const SignIn = (props) =>{
                         <Block center>
                           <Button color="primary" round style={styles.createButton} onPress={ ()=>{
                            console.log("login");
-                           fetch('http://172.30.48.1:8036/api/auth/login', {
+                           fetch('http://10.214.41.144:8036/api/auth/login', {
                               method: 'POST',
                               headers: {
                                 Accept: 'application/json',
@@ -178,6 +179,9 @@ const SignIn = (props) =>{
                             .then((data) => {
                               console.log(data);
                               if(data.accessToken !=null){
+                                global.token=data.accessToken;
+                                global.user=data;
+                                console.log(global.user);
                                 navigation.navigate('App');
                               }
                             })

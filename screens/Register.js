@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import {
   StyleSheet,
   ImageBackground,
@@ -7,36 +8,96 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
-
+import axios from 'axios';
 const { width, height } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
+
+
+
 const Register = (props) => {
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [data2, setData] = useState([]);
+
+  
+  useEffect(() => {
+    setLoading(true);
+    fetch('http://10.214.41.144:8036/api/universite/', {
+      method: 'GET',
+      headers: {
+          'Accept': 'application/json',
+      },
+  })
+  .then(response => response.json())
+  .then(data => {console.log("log :"+JSON.stringify(data));
+  var count = Object.keys(data).length;
+  let dropDownData = [];
+
+  data.map( (data) =>{
+
+
+
+dropDownData.push( {value:data.libelle   , obj:data}    ); // Create your array of data
+
+
+  }  )
+
+
+  setData(dropDownData)
+
+  
+  console.log("hnaaa   "+data2)
+
+})
+
+},[] );
+
+
+  const renderLabel = () => {
+    if (value || isFocus) {
+      return (
+        <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+          Dropdown label
+        </Text>
+      );
+    }
+    return null;
+  };
+
+
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const { navigation } = props;
+
+
+ 
   return (
     <DismissKeyboard>
-      <Block flex middle>
+      <Block flex style={{ paddingHorizontal: theme.SIZES.BASE * 1.3}}>
         <ImageBackground
           source={Images.RegisterBackground}
           style={styles.imageBackgroundContainer}
           imageStyle={styles.imageBackground}
         >
-          <Block flex middle>
+          <Block flex >
             <Block style={styles.registerContainer}>
               <Block flex space="evenly">
-                <Block flex={0.4} middle style={styles.socialConnect}>
-                  <Block flex={0.5} middle>
+                <Block flex={0.4} style={{ paddingHorizontal: theme.SIZES.BASE ,backgroundColor: nowTheme.COLORS.WHITE}}>
+                  <Block flex={0.5} style={{ paddingHorizontal: theme.SIZES.BASE }}>
                     <Text
                       style={{
                         fontFamily: 'montserrat-regular',
@@ -49,7 +110,7 @@ const Register = (props) => {
                     </Text>
                   </Block>
 
-                  <Block flex={0.5} row middle space="between" style={{ marginBottom: 18 }}>
+                  <Block flex={0.5} row space="between" style={{ paddingHorizontal: theme.SIZES.BASE ,marginBottom: 18 }}>
                     <GaButton
                       round
                       onlyIcon
@@ -86,7 +147,7 @@ const Register = (props) => {
                     />
                   </Block>
                 </Block>
-                <Block middle>
+                <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
                   <Text
                     style={{
                       fontFamily: 'montserrat-regular',
@@ -99,7 +160,7 @@ const Register = (props) => {
                   </Text>
                 </Block>
 
-                <Block flex={1} middle space="between">
+                <Block flex={1} style={{ paddingHorizontal: theme.SIZES.BASE }} space="between">
                   <Block center flex={0.9}>
                     <Block flex space="between">
                       <Block>
@@ -168,6 +229,37 @@ const Register = (props) => {
                             }
                           />
                         </Block>
+                        <Block>
+                          <Dropdown
+                            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            data={data2}
+                            maxHeight={300}
+                            labelField="value"
+                             valueField="value"
+                            placeholder={!isFocus ? 'Select Universite' : '...'}
+                            searchPlaceholder="Search..."
+                            onFocus={() => setIsFocus(true)}
+                            onBlur={() => setIsFocus(false)}
+                            value="value"
+                            onChange={item => {
+                              console.log("item  "+ item.obj );
+                              setValue(item.obj);
+                              setIsFocus(false);
+                            }}
+                            renderLeftIcon={() => (
+                              <AntDesign
+                                style={styles.icon}
+                                color={isFocus ? 'blue' : 'black'}
+                                name="Safety"
+                                size={20}
+                              />
+                            )}
+                          />
+                        </Block>
                         <Block
                           style={{ marginVertical: theme.SIZES.BASE, marginLeft: 15 }}
                           row
@@ -187,11 +279,13 @@ const Register = (props) => {
                             label="I agree to the terms and conditions."
                           />
                         </Block>
+                        
                       </Block>
-                      <Block center>
+                      <Block center style={{marginBottom: 2}}>
                         <Button color="primary" round style={styles.createButton} onPress={() => {
                           console.log("login");
-                          fetch('http://172.30.48.1:8036/api/auth/signup', {
+                          console.log(value);
+                          fetch('http://10.214.41.144:8036/api/auth/signup', {
                             method: 'POST',
                             headers: {
                               Accept: 'application/json',
@@ -202,11 +296,7 @@ const Register = (props) => {
                               password: password,
                               phone: phone,
                               email: email,
-                              universite: {
-                                id: "636131b519c13795f9146377",
-                                libelle: "university",
-                                addresse: "addresse"
-                              }
+                              universite: value
                             })
                           }).then((response) => response.json())
                             .then((data) => {
@@ -228,9 +318,22 @@ const Register = (props) => {
                           </Text>
 
                         </Button>
-                        
+                        <Button
+                            shadowless
+                            style={{ backgroundColor: nowTheme.COLORS.WHITE }}
+                            onPress={() => navigation.navigate('Account')}
+                          >
+                            <Text
+                              style={{ fontFamily: 'montserrat-bold', fontSize: 14 }}
+                              color={theme.COLORS.BLACK}
+                            >
+                              SignIn? 
+                            </Text>
+                          </Button>
+                       
                       </Block>
-                
+                      
+
                     </Block>
                   </Block>
                 </Block>
@@ -258,7 +361,7 @@ const styles = StyleSheet.create({
   registerContainer: {
     marginTop: 55,
     width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.8,
+    height: height < 820 ? height * 0.8 : height * 0.9,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
     shadowColor: nowTheme.COLORS.BLACK,
@@ -319,6 +422,40 @@ const styles = StyleSheet.create({
     borderRadius: theme.SIZES.BASE * 1.75,
     justifyContent: 'center',
     marginHorizontal: 10
+  },
+  dropdown: {
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 21.5,
+    paddingHorizontal: 8,
+    backgroundColor: 'white'
+},
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   }
 });
 

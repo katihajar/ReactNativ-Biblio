@@ -6,10 +6,14 @@ import { Card, Button } from "../components";
 import articles from "../constants/articles";
 const { width } = Dimensions.get("screen");
 
-class Home extends React.Component {
-  renderArticles = () => {
+const Home = (props) => {
+ 
+  
     return (
-      <ScrollView
+      
+      <Block flex center style={styles.home}>
+         
+         <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.articles}
       >
@@ -26,16 +30,9 @@ class Home extends React.Component {
           <Card item={articles[4]} full />
         </Block>
       </ScrollView>
-    );
-  };
-
-  render() {
-    return (
-      <Block flex center style={styles.home}>
-        {this.renderArticles()}
       </Block>
     );
-  }
+  
 }
 
 const styles = StyleSheet.create({
