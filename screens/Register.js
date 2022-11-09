@@ -33,7 +33,7 @@ const Register = (props) => {
   
   useEffect(() => {
     setLoading(true);
-    fetch('http://10.214.41.144:8036/api/universite/', {
+    fetch('http://10.85.33.114:8036/api/universite/', {
       method: 'GET',
       headers: {
           'Accept': 'application/json',
@@ -285,7 +285,7 @@ dropDownData.push( {value:data.libelle   , obj:data}    ); // Create your array 
                         <Button color="primary" round style={styles.createButton} onPress={() => {
                           console.log("login");
                           console.log(value);
-                          fetch('http://10.214.41.144:8036/api/auth/signup', {
+                          fetch('http://10.85.33.114:8036/api/auth/signup', {
                             method: 'POST',
                             headers: {
                               Accept: 'application/json',

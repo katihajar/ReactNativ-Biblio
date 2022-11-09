@@ -61,7 +61,7 @@ const FormDoc = (props) => {
     useEffect(() => {
         console.log(accessToken);
         setLoading(true);
-        fetch('http://10.214.41.144:8036/api/thematique/', {
+        fetch('http://10.85.33.114:8036/api/thematique/', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -217,7 +217,7 @@ const FormDoc = (props) => {
                                             <Button color="primary" round style={styles.createButton} onPress={() => {
                                                 console.log("login");
                                                 console.log(value);
-                                                fetch('http://10.214.41.144:8036/api/auth/signup', {
+                                                fetch('http://10.85.33.114:8036/api/auth/signup', {
                                                     method: 'POST',
                                                     headers: {
                                                         Accept: 'application/json',
