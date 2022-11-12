@@ -73,6 +73,30 @@ function ArticlesStack(props) {
   );
 }
 
+function UploadStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="FormDoc"
+      screenOptions={{
+        mode: 'card',
+        headerShown: 'screen',
+      }}
+    >
+      <Stack.Screen
+        name="FormDoc"
+        component={FormDoc}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="Document" navigation={navigation} scene={scene} />
+          ),
+          backgroundColor: '#FFFFFF',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+
 function AccountStack(props) {
   return (
     <Stack.Navigator
@@ -93,6 +117,7 @@ function AccountStack(props) {
   );
 }
 
+
 function ProfileStack(props) {
   return (
     <Stack.Navigator
@@ -107,22 +132,12 @@ function ProfileStack(props) {
         component={Profile}
         options={{
           header: ({ navigation, scene }) => (
-            <Header transparent white title="Profile" navigation={navigation} scene={scene} />
+            <Header  title="Profile" navigation={navigation} scene={scene} />
           ),
           cardStyle: { backgroundColor: '#FFFFFF' },
-          headerTransparent: true,
         }}
       />
-      <Stack.Screen
-        name="Pro"
-        component={Pro}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header title="" back white transparent navigation={navigation} scene={scene} />
-          ),
-          headerTransparent: true,
-        }}
-      />
+      
     </Stack.Navigator>
   );
 }
@@ -236,6 +251,13 @@ function AppStack(props) {
           headerShown: false,
         }}
       />
+      <Drawer.Screen
+        name="FormDoc"
+        component={UploadStack}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -258,7 +280,8 @@ export default function OnboardingStack(props) {
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="Account" component={Register} />
       <Stack.Screen name="App" component={AppStack} />
-      <Stack.Screen name="FormDoc" component={FormDoc} />
+      <Stack.Screen name="FormDoc" component={UploadStack} />
+      <Stack.Screen name="Profile" component={ProfileStack} />
     </Stack.Navigator>
   );
 }

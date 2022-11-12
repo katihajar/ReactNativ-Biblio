@@ -39,7 +39,7 @@ const Profile = () => {
                     }}
                     color='#ffffff'
                     >
-                    Ryan Scheinder
+                    {global.user.username? global.user.username: ''}
                   </Text>
 
                   <Text

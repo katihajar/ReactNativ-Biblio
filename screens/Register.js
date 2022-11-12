@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-
 import {
   StyleSheet,
   ImageBackground,
   Dimensions,
   StatusBar,
   TouchableWithoutFeedback,
+  ScrollView,
   Keyboard
 } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -33,7 +33,7 @@ const Register = (props) => {
   
   useEffect(() => {
     setLoading(true);
-    fetch('http://10.85.33.114:8036/api/universite/', {
+    fetch('http://localhost:8036/api/universite/', {
       method: 'GET',
       headers: {
           'Accept': 'application/json',
@@ -82,18 +82,21 @@ dropDownData.push( {value:data.libelle   , obj:data}    ); // Create your array 
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const { navigation } = props;
+  const {err, setErr}=useState('');
 
 
  
   return (
+    
     <DismissKeyboard>
-      <Block flex style={{ paddingHorizontal: theme.SIZES.BASE * 1.3}}>
+      <ScrollView showsVerticalScrollIndicator={false}>{
+      <Block flex>
         <ImageBackground
           source={Images.RegisterBackground}
           style={styles.imageBackgroundContainer}
           imageStyle={styles.imageBackground}
         >
-          <Block flex >
+          <Block flex  style={{ paddingHorizontal: theme.SIZES.BASE * 1.3}}>
             <Block style={styles.registerContainer}>
               <Block flex space="evenly">
                 <Block flex={0.4} style={{ paddingHorizontal: theme.SIZES.BASE ,backgroundColor: nowTheme.COLORS.WHITE}}>
@@ -147,6 +150,14 @@ dropDownData.push( {value:data.libelle   , obj:data}    ); // Create your array 
                     />
                   </Block>
                 </Block>
+                <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
+                {err != null ? (
+                                                <Text style={styles.textStyle}>
+                                                    {err ? err : ''}
+                                                    {'\n'}
+                                                   
+                                                </Text>
+                                            ) : null}</Block>
                 <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
                   <Text
                     style={{
@@ -285,7 +296,7 @@ dropDownData.push( {value:data.libelle   , obj:data}    ); // Create your array 
                         <Button color="primary" round style={styles.createButton} onPress={() => {
                           console.log("login");
                           console.log(value);
-                          fetch('http://10.85.33.114:8036/api/auth/signup', {
+                          fetch('http://localhost:8036/api/auth/signup', {
                             method: 'POST',
                             headers: {
                               Accept: 'application/json',
@@ -307,6 +318,7 @@ dropDownData.push( {value:data.libelle   , obj:data}    ); // Create your array 
                             })
                             .catch((err) => {
                               console.log(err);
+                              setErr("Failled to register")
                             });
                         }} >
                           <Text
@@ -342,6 +354,7 @@ dropDownData.push( {value:data.libelle   , obj:data}    ); // Create your array 
           </Block>
         </ImageBackground>
       </Block>
+      }</ScrollView>
     </DismissKeyboard>
   );
 }

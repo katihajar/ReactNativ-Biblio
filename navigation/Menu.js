@@ -11,7 +11,7 @@ const { width } = Dimensions.get('screen');
 
 function CustomDrawerContent({ drawerPosition, navigation, profile, focused, state, ...rest }) {
   const insets = useSafeArea();
-  const screens = ['Home', 'Components', 'Articles', 'Profile'];
+  const screens = ['Home', 'Articles', 'Profile'];
   return (
     <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
       <Block style={styles.header}>
@@ -33,7 +33,6 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
             );
           })}
         
-          <DrawerCustomItem title="GETTING STARTED" navigation={navigation} />
           <DrawerCustomItem title="LOGOUT" navigation={navigation} />
         </ScrollView>
       </Block>

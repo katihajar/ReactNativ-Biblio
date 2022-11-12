@@ -9,7 +9,8 @@ import {
     AsyncStorage,
     TouchableOpacity
 } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
@@ -32,36 +33,71 @@ const FormDoc = (props) => {
     const [loading, setLoading] = useState(true);
     const [data2, setData] = useState([]);
     const accessToken = global.token;
-    const [checked, setChecked] = useState(true);
+    const [checked, setChecked] = useState(false);
     const toggleChecked = () => {
         setChecked(value => !value);
         console.log("hna chked  " + checked);
     };
     const [singleFile, setSingleFile] = useState(null);
-
-
+    const [doc, setDoc] = useState();
+    const [uri, setUri] = useState();
+    const [name, setName] = useState();
+    const [type, setType] = useState();
+    const [size, setSyze] = useState();
     const selectFile = async () => {
         try {
-            const res = await DocumentPicker.pickSingleFile({
-                type: [DocumentPicker.types.allFiles],
+            let res = await DocumentPicker.getDocumentAsync({
             });
             console.log('res : ' + JSON.stringify(res));
             setSingleFile(res);
         } catch (err) {
             setSingleFile(null);
-            if (DocumentPicker.isCancel(err)) {
-                alert('Canceled');
-            } else {
-                alert('Unknown Error: ' + JSON.stringify(err));
-                throw err;
-            }
+            alert('Unknown Error: ' + JSON.stringify(err));
+            throw err;
+
         }
     };
+
+    const pickDocument = async () => {
+        let result = await DocumentPicker.getDocumentAsync({
+            type: "*/*",
+            copyToCacheDirectory: true
+        })
+            .then(response => {
+                if (response.type == 'success') {
+                    let { name, size, uri } = response;
+
+                    / ------------------------/
+                    if (Platform.OS === "android" && uri[0] === "/") {
+                        uri = `file://${uri}`;
+                        uri = uri.replace(/%/g, "%25");
+                    }
+                    / ------------------------/
+
+                    let nameParts = name.split('.');
+                    let fileType = nameParts[nameParts.length - 1];
+                    var fileToUpload = {
+                        name: name,
+                        size: size,
+                        uri: uri,
+                        type: "application/" + fileType
+                    };
+                    console.log(fileToUpload, '...............file')
+                    setType("application/" + fileType);
+                    setName(name);
+                    setUri(uri);
+                    setSyze(size);
+                    setDoc(fileToUpload);
+                }
+            });
+        // console.log(result);
+
+    }
 
     useEffect(() => {
         console.log(accessToken);
         setLoading(true);
-        fetch('http://10.85.33.114:8036/api/thematique/', {
+        fetch('http://localhost:8036/api/thematique/', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -73,46 +109,13 @@ const FormDoc = (props) => {
                 console.log("log :" + JSON.stringify(data));
                 var count = Object.keys(data).length;
                 let dropDownData = [];
-
                 data.map((data) => {
-
-
-
                     dropDownData.push({ value: data.domaine, obj: data }); // Create your array of data
-
-
                 })
-
-
                 setData(dropDownData)
-
-
                 console.log("hnaaa   " + data2)
-
             })
-
     }, []);
-
-
-    const renderLabel = () => {
-        if (value || isFocus) {
-            return (
-                <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-                    Dropdown label
-                </Text>
-            );
-        }
-        return null;
-    };
-
-
-
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
-
-
 
     return (
         <DismissKeyboard>
@@ -121,7 +124,6 @@ const FormDoc = (props) => {
                     <Block style={styles.registerContainer}>
                         <Block flex space="evenly">
                             <Block flex={1} style={{ paddingHorizontal: theme.SIZES.BASE }} space="between">
-
                                 <Block center flex={0.9}>
                                     <Block flex space="between">
                                         <Block style={{ paddingHorizontal: theme.SIZES.BASE, marginTop: 30 }}>
@@ -137,7 +139,6 @@ const FormDoc = (props) => {
                                             </Text>
                                         </Block>
                                         <Block>
-
                                             <Block>
                                                 <Dropdown
                                                     style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
@@ -169,24 +170,18 @@ const FormDoc = (props) => {
                                                     )}
                                                 />
                                             </Block>
-                                            
-                                           
                                             <TouchableOpacity
                                                 style={styles.buttonStyle}
                                                 activeOpacity={0.5}
-                                                onPress={selectFile}>
+                                                onPress={pickDocument}>
                                                 <Text style={styles.buttonTextStyle}>Select File</Text>
                                             </TouchableOpacity>
-                                             {/*Showing the data of selected Single file*/}
-                                             {singleFile != null ? (
+                                            {/*Showing the data of selected Single file*/}
+                                            {doc != null ? (
                                                 <Text style={styles.textStyle}>
-                                                    File Name: {singleFile.name ? singleFile.name : ''}
+                                                    File Name: {doc.name ? doc.name : ''}
                                                     {'\n'}
-                                                    Type: {singleFile.type ? singleFile.type : ''}
-                                                    {'\n'}
-                                                    File Size: {singleFile.size ? singleFile.size : ''}
-                                                    {'\n'}
-                                                    URI: {singleFile.uri ? singleFile.uri : ''}
+                                                    File Size: {doc.size ? doc.size : ''}
                                                     {'\n'}
                                                 </Text>
                                             ) : null}
@@ -216,27 +211,33 @@ const FormDoc = (props) => {
                                         <Block center style={{ marginBottom: 2 }}>
                                             <Button color="primary" round style={styles.createButton} onPress={() => {
                                                 console.log("login");
-                                                console.log(value);
-                                                fetch('http://10.85.33.114:8036/api/auth/signup', {
+                                                console.log("Doc: " + doc);
+                                                console.log("name :" + name);
+                                                console.log("type :" + type);
+                                                console.log("uri :" + uri);
+                                                const formData = new FormData();
+                                                formData.append('file', { uri, name: name, type: type });
+                                                formData.append('visi', checked);
+                                                formData.append('them',  value.id );
+                                                formData.append('user',  global.idUser );
+                                                console.log("data file : " + JSON.stringify(formData));
+                                                fetch('http://localhost:8036/api/document/upload', {
                                                     method: 'POST',
                                                     headers: {
                                                         Accept: 'application/json',
-                                                        'Content-Type': 'application/json'
+                                                        'Authorization': `Bearer ${accessToken}`
                                                     },
-                                                    body: JSON.stringify({
-                                                        username: username,
-                                                        password: password,
-                                                        phone: phone,
-                                                        email: email,
-                                                        universite: value
-                                                    })
-                                                }).then((response) => response.json())
-                                                    .then((data) => {
-                                                        console.log(data);
-                                                        if (data.accessToken != null) {
-                                                            navigation.navigate('SignIn');
-                                                        }
-                                                    })
+                                                    body: formData
+
+
+                                                }).then((response) =>{
+                                                    response.json();
+                                                    setValue(null);
+                                                    setDoc(null);
+                                                    setChecked(false);
+                                                    setIsFocus(false);
+                                                }
+                                                )
                                                     .catch((err) => {
                                                         console.log(err);
                                                     });
@@ -246,7 +247,7 @@ const FormDoc = (props) => {
                                                     size={14}
                                                     color={nowTheme.COLORS.WHITE}
                                                 >
-                                                   Upload
+                                                    Upload
                                                 </Text>
 
                                             </Button>
@@ -278,7 +279,8 @@ const styles = StyleSheet.create({
         height: height
     },
     registerContainer: {
-        marginTop: 55,
+        marginTop: 10,
+        marginBottom: 10,
         width: width * 0.9,
         height: height < 820 ? height * 0.8 : height * 0.9,
         backgroundColor: nowTheme.COLORS.WHITE,
@@ -355,8 +357,7 @@ const styles = StyleSheet.create({
     },
     createButton: {
         width: width * 0.5,
-        marginTop: 25,
-        marginBottom: 40
+        marginBottom: 50
     },
     social: {
         width: theme.SIZES.BASE * 3.5,

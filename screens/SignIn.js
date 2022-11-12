@@ -5,10 +5,10 @@ import {
   ImageBackground,
   Dimensions,
   StatusBar,
+  ScrollView,
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
 import { Button, Icon, Input } from '../components';
@@ -22,24 +22,25 @@ const DismissKeyboard = ({ children }) => (
 );
 
 
-const SignIn = (props) =>{
-  
+const SignIn = (props) => {
+
   const { navigation } = props;
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    return (
-      <DismissKeyboard>
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  return (
+    <DismissKeyboard>
+      <ScrollView showsVerticalScrollIndicator={false}>{
         <Block flex >
           <ImageBackground
             source={Images.RegisterBackground}
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
           >
-            <Block flex style={{ paddingHorizontal: theme.SIZES.BASE * 1.3}} >
+            <Block flex style={{ paddingHorizontal: theme.SIZES.BASE * 1.3 }} >
               <Block style={styles.registerContainer}>
                 <Block flex space="evenly">
-                  <Block flex={0.4} style={{ paddingHorizontal: theme.SIZES.BASE ,backgroundColor: nowTheme.COLORS.WHITE}} >
+                  <Block flex={0.4} style={{ paddingHorizontal: theme.SIZES.BASE, backgroundColor: nowTheme.COLORS.WHITE }} >
                     <Block flex={0.5} style={{ paddingHorizontal: theme.SIZES.BASE }}>
                       <Text
                         style={{
@@ -53,7 +54,7 @@ const SignIn = (props) =>{
                       </Text>
                     </Block>
 
-                    <Block flex={0.5} row tyle={{paddingTop: theme.SIZES.BASE }} space="between" style={{ marginBottom: 18 }}>
+                    <Block flex={0.5} row tyle={{ paddingTop: theme.SIZES.BASE }} space="between" style={{ marginBottom: 18 }}>
                       <GaButton
                         round
                         onlyIcon
@@ -90,7 +91,7 @@ const SignIn = (props) =>{
                       />
                     </Block>
                   </Block>
-                  <Block flex={0.1} tyle={{paddingTop: theme.SIZES.BASE }}>
+                  <Block flex={0.1} tyle={{ paddingTop: theme.SIZES.BASE }}>
                     <Text
                       style={{
                         fontFamily: 'montserrat-regular',
@@ -102,7 +103,7 @@ const SignIn = (props) =>{
                       or be classical
                     </Text>
                   </Block>
-                  <Block flex={1} tyle={{paddingTop: theme.SIZES.BASE }} space="between">
+                  <Block flex={1} tyle={{ paddingTop: theme.SIZES.BASE }} space="between">
                     <Block center flex={0.9}>
                       <Block flex space="between">
                         <Block>
@@ -163,9 +164,9 @@ const SignIn = (props) =>{
                           </Block>
                         </Block>
                         <Block center>
-                          <Button color="primary" round style={styles.createButton} onPress={ ()=>{
-                           console.log("login");
-                           fetch('http://10.85.33.114:8036/api/auth/login', {
+                          <Button color="primary" round style={styles.createButton} onPress={() => {
+                            console.log("login");
+                            fetch('http://localhost:8036/api/auth/login', {
                               method: 'POST',
                               headers: {
                                 Accept: 'application/json',
@@ -175,19 +176,20 @@ const SignIn = (props) =>{
                                 username: username,
                                 password: password
                               })
-                            }) .then((response) => response.json())
-                            .then((data) => {
-                              console.log(data);
-                              if(data.accessToken !=null){
-                                global.token=data.accessToken;
-                                global.user=data;
-                                console.log(global.user);
-                                navigation.navigate('App');
-                              }
-                            })
-                            .catch((err) => {
-                              console.log(err);
-                            });
+                            }).then((response) => response.json())
+                              .then((data) => {
+                                console.log(data);
+                                if (data.accessToken != null) {
+                                  global.token = data.accessToken;
+                                  global.user = data;
+                                  global.idUser = data.user.id
+                                  console.log(data.user.id);
+                                  navigation.navigate('App');
+                                }
+                              })
+                              .catch((err) => {
+                                console.log(err);
+                              });
                           }} >
                             <Text
                               style={{ fontFamily: 'montserrat-bold' }}
@@ -218,9 +220,10 @@ const SignIn = (props) =>{
             </Block>
           </ImageBackground>
         </Block>
-      </DismissKeyboard>
-    );
-  }
+      }</ScrollView>
+    </DismissKeyboard>
+  );
+}
 
 const styles = StyleSheet.create({
   imageBackgroundContainer: {
