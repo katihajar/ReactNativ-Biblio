@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 //galio
 import { Block, Text, theme } from 'galio-framework';
-import { SafeAreaView, View, VirtualizedList,SectionList, StatusBar } from 'react-native';
+import { SafeAreaView, View, VirtualizedList, SectionList, StatusBar,FlatList,Image } from 'react-native';
 import { articles, nowTheme } from '../constants/';
 import { Card } from '../components/';
 import { Button, Icon, Input } from '../components';
@@ -14,7 +14,7 @@ const Articles = (props) => {
   const accessToken = global.token;
   const [data, setData] = useState();
 
-
+  
 
   useEffect(() => {
     setLoading(true);
@@ -27,30 +27,19 @@ const Articles = (props) => {
     })
       .then(response => response.json())
       .then(data => {
+        if(loading ){
         setData(data);
-       
-      })
-  })
-  const student_data= ()=>{
-    
-    for(const i=0;i<data.lenght;i++){
-      console.log("lenght :"+data.lenght);
-      console.log("title :"+(data.titre));
-      
- return(<Text>{data[i].titre}</Text>);
+        }
 
-};
-  }
-  const Item = ({ title }) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  );
+      });
+      return () => {
+        setLoading(false);
+        };
+  }, [])
+
   return (
-    <Block flex>
-      <ScrollView showsVerticalScrollIndicator={false}>{
-        <Block style={styles.container}>
-        <Block right >
+    <Block flex style={{ paddingHorizontal: theme.SIZES.BASE*1.1 }}>
+       <Block right >
           <Button color="primary" round style={styles.createButton} onPress={() => {
             navigation.navigate('FormDoc');
           }} >
@@ -65,38 +54,72 @@ const Articles = (props) => {
           </Button>
 
         </Block>
-        <Text size={16} style={styles.title}>
-          Cards
-        </Text>
-        <Card item={articles[0]} horizontal />
         <Block flex row>
-
-        </Block>
-        <Card item={articles[3]} horizontal />
-        <Card item={articles[4]} full />
-
-      </Block>}</ScrollView>
+            <SafeAreaView style={styles.container}>
+              <FlatList
+                data={data}
+                renderItem={({ item }) => {
+                  return (
+                    <View style={[styles.item,styles.elevation]}>
+                    <Image
+                     source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/375px-Image_created_with_a_mobile_phone.png" }}
+                    style={styles.im}
+                  />
+                   <Text >{item.titre}</Text>
+                   <Text  style={{color:'blue'}}>View Document</Text>
+                   </View>
+                  );
+              }}
+                keyExtractor={(item) => item.id}
+              />
+            </SafeAreaView>
+          </Block>
     </Block>
   );
 
 }
-
 const styles = StyleSheet.create({
+
+
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight,
+    marginTop: 4,
+    
   },
   item: {
-    backgroundColor: '#f9c2ff',
-    height: 150,
-    justifyContent: 'center',
+    shadowOffset: {width: -2, height: 4},  
+    shadowColor: '#171717',  
+    shadowOpacity: 0.2,  
+    shadowRadius: 3,  
+    borderRadius: 8,  
+    paddingVertical: theme.SIZES.BASE,
+    paddingHorizontal: 2,
+    fontFamily: 'montserrat-regular',
+    backgroundColor: 'white',
+    height: 250,
     marginVertical: 8,
-    marginHorizontal: 16,
-    padding: 20,
+    justifyContent:'center',
+    alignItems: 'center',
+    marginHorizontal: 12,
   },
+  elevation: {  
+    shadowColor: '#52006A',  
+    elevation: 10,  
+  }, 
+ 
   title: {
     fontSize: 32,
   },
+ 
+  im:{
+    height: 210, width: 350,
+    borderRadius: 8,  
+  },
+  textV:{
+    alignItems: 'right',
+    color:'blue'
+  }
 });
+
 
 export default Articles;

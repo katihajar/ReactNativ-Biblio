@@ -155,7 +155,7 @@ function HomeStack(props) {
         component={Home}
         options={{
           header: ({ navigation, scene }) => (
-            <Header title="Home" search navigation={navigation} scene={scene} />
+            <Header title="Home"  navigation={navigation} scene={scene} />
           ),
           cardStyle: { backgroundColor: '#FFFFFF' },
         }}
@@ -230,13 +230,7 @@ function AppStack(props) {
           headerShown: false,
         }}
       />
-      <Drawer.Screen
-        name="Components"
-        component={ComponentsStack}
-        options={{
-          headerShown: false,
-        }}
-      />
+     
       <Drawer.Screen
         name="Articles"
         component={ArticlesStack}
@@ -280,8 +274,6 @@ export default function OnboardingStack(props) {
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="Account" component={Register} />
       <Stack.Screen name="App" component={AppStack} />
-      <Stack.Screen name="FormDoc" component={UploadStack} />
-      <Stack.Screen name="Profile" component={ProfileStack} />
     </Stack.Navigator>
   );
 }
