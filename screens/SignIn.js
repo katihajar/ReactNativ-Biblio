@@ -131,6 +131,7 @@ const SignIn = (props) => {
                               placeholder="Password"
                               name="password"
                               style={styles.inputs}
+                              secureTextEntry={true}
                               onChangeText={newText => setPassword(newText)}
                               iconContent={
                                 <Icon

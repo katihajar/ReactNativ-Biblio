@@ -228,6 +228,7 @@ dropDownData.push( {value:data.libelle   , obj:data}    ); // Create your array 
                           <Input
                             placeholder="Password"
                             style={styles.inputs}
+                            secureTextEntry={true}
                             onChangeText={newText => setPassword(newText)}
                             iconContent={
                               <Icon
