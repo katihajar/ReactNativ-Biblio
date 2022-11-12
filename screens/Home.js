@@ -44,7 +44,7 @@ const Home = (props) => {
   
     return (
       
-      <Block style={{ paddingHorizontal: theme.SIZES.BASE*0.6 }}>
+      <Block style={{ paddingHorizontal: theme.SIZES.BASE*1 }}>
       <Input
         placeholder="search for document"
         shadowless
