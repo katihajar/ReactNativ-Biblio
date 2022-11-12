@@ -29,9 +29,11 @@ const SignIn = (props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   return (
+  
     <DismissKeyboard>
-      <ScrollView showsVerticalScrollIndicator={false}>{
+      
         <Block flex >
+        <ScrollView showsVerticalScrollIndicator={false}>{
           <ImageBackground
             source={Images.RegisterBackground}
             style={styles.imageBackgroundContainer}
@@ -220,8 +222,8 @@ const SignIn = (props) => {
               </Block>
             </Block>
           </ImageBackground>
+}</ScrollView>
         </Block>
-      }</ScrollView>
     </DismissKeyboard>
   );
 }
