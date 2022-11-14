@@ -36,7 +36,6 @@ const Articles = (props) => {
         setLoading(false);
         };
   }, [])
-
   return (
     <Block flex style={{ paddingHorizontal: theme.SIZES.BASE*1.1 }}>
        <Block right >
