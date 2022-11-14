@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
  
   im:{
     height: 210, width: 350,
-    borderRadius: 8,  
+    borderTopLeftRadius: 8,  
+    borderTopRightRadius: 8,
   },
   textV:{
     alignItems: 'right',

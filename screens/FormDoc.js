@@ -57,9 +57,10 @@ const FormDoc = (props) => {
 
         }
     };
+    let result;
 
     const pickDocument = async () => {
-        let result = await DocumentPicker.getDocumentAsync({
+         result = await DocumentPicker.getDocumentAsync({
             type: "*/*",
             copyToCacheDirectory: true
         })
@@ -71,6 +72,7 @@ const FormDoc = (props) => {
                     if (Platform.OS === "android" && uri[0] === "/") {
                         uri = `file://${uri}`;
                         uri = uri.replace(/%/g, "%25");
+                        
                     }
                     / ------------------------/
 
@@ -211,10 +213,6 @@ const FormDoc = (props) => {
                                         <Block center style={{ marginBottom: 2 }}>
                                             <Button color="primary" round style={styles.createButton} onPress={() => {
                                                 console.log("login");
-                                                console.log("Doc: " + doc);
-                                                console.log("name :" + name);
-                                                console.log("type :" + type);
-                                                console.log("uri :" + uri);
                                                 const formData = new FormData();
                                                 formData.append('file', { uri, name: name, type: type });
                                                 formData.append('visi', checked);
@@ -236,6 +234,8 @@ const FormDoc = (props) => {
                                                     setDoc(null);
                                                     setChecked(false);
                                                     setIsFocus(false);
+                                                    if(response){
+                                                        navigation.navigate('Articles')}
                                                 }
                                                 )
                                                     .catch((err) => {

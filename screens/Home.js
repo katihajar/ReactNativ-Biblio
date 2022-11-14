@@ -3,9 +3,9 @@ import { StyleSheet, Dimensions, ScrollView,StatusBar} from "react-native";
 import { SafeAreaView, View,FlatList,Image } from 'react-native';
 import { Input ,Icon} from '../components';
 import { nowTheme } from '../constants';
-
+import OpenFile from 'react-native-files-viewer';
 import { Block, theme, Text } from "galio-framework";
-
+import { WebView } from 'react-native-webview';
 import { Card, Button } from "../components";
 import articles from "../constants/articles";
 const { width } = Dimensions.get("screen");
@@ -17,7 +17,15 @@ const Home = (props) => {
   const accessToken = global.token;
   const [data, setData] = useState();
 
-
+/* <WebView
+                    javaScriptEnabled={true}
+                    source={{
+                      html: `
+        <iframe src="data:${item.fileType};base64,${item.file}">
+        </iframe>
+    ` }}
+                  />
+                  */
 
 
   useEffect(() => {
@@ -43,9 +51,10 @@ const Home = (props) => {
 
   
     return (
-      
-      <Block style={{ paddingHorizontal: theme.SIZES.BASE*1 }}>
+      <Block flex style={{ paddingHorizontal: theme.SIZES.BASE*1.1}}>
+       <Block center >
       <Input
+        flex={0}
         placeholder="search for document"
         shadowless
         iconContent={
@@ -57,9 +66,9 @@ const Home = (props) => {
             family="NowExtra"
           />
         }
-      />
-      <Block row>
-         
+      /></Block>
+      <Block row style={{paddingBottom:theme.SIZES.BASE*6}}>
+      
             <SafeAreaView style={styles.container}>
               <FlatList
                 data={data}
@@ -71,12 +80,29 @@ const Home = (props) => {
                     style={styles.im}
                   />
                    <Text >{item.titre}</Text>
-                   <Text  style={{color:'blue'}}>View Document</Text>
+                   <Button
+                            shadowless
+
+                            style={{ backgroundColor: nowTheme.COLORS.WHITE,height:20,cursor: 'pointer' }}
+                            onPress={() =>{
+                              if (Platform.OS === 'android') {
+                                OpenFile.openDocb64(
+                                  {
+                                    base64:item.file,
+                                    fileName: item.titre,
+                                    fileType: item.fileType,
+                                  },
+                                );
+                              }
+                            }}
+                          >
+                   <Text  style={{color:'blue'}}>View Document</Text></Button>
                    </View>
                   );
               }}
                 keyExtractor={(item) => item.id}
               />
+              
             </SafeAreaView>
           </Block>
           </Block>
@@ -85,27 +111,26 @@ const Home = (props) => {
 }
 
 const styles = StyleSheet.create({
-  home: {
-    width: width
-  },
-
-  container: {
-    flex: 1,
-    marginTop: 4,
-    
-  },
+Home:{
+  width:width
+},
+container: {
+  flex: 1,
+  marginTop: 4,
+  
+  
+},
   item: {
     shadowOffset: {width: -2, height: 4},  
     shadowColor: '#171717',  
     shadowOpacity: 0.2,  
     shadowRadius: 3,  
     borderRadius: 8,  
-    paddingVertical: theme.SIZES.BASE,
     paddingHorizontal: 2,
     fontFamily: 'montserrat-regular',
     backgroundColor: 'white',
     height: 250,
-    marginVertical: 8,
+    marginVertical: 10,
     justifyContent:'center',
     alignItems: 'center',
     marginHorizontal: 12,
@@ -121,7 +146,8 @@ const styles = StyleSheet.create({
  
   im:{
     height: 210, width: 350,
-    borderRadius: 8,  
+    borderTopLeftRadius: 8,  
+    borderTopRightRadius: 8,
   },
   textV:{
     alignItems: 'right',
