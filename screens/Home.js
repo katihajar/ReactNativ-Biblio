@@ -10,9 +10,9 @@ import articles from "../constants/articles";
 const { width } = Dimensions.get("screen");
 import { NativeModules } from 'react-native';
 import * as FileSystem from 'expo-file-system';
-import { shareAsync } from 'expo-sharing';
 import { printToFileAsync } from 'expo-print';
-import {decode, encode} from 'base-64';
+import { decode, encode } from 'base-64';
+import * as Sharing from 'expo-sharing';
 const Home = (props) => {
   const RNReactNativeDocViewer = NativeModules.RNReactNativeDocViewer;
 
@@ -112,11 +112,31 @@ const Home = (props) => {
                     onPress={async () => {
                       global.base64Doc = `data:application/pdf;base64,${item.file}`;
                       //global.fileName = item.titre;
-                      
+                      const pdfBuffer = item.file;
+
+                      // const path = `${FileSystem.documentDirectory}/${item.titre}`;
+                      //  await FileSystem.writeAsStringAsync(`${path}`, pdfBuffer, {
+                      //    encoding: FileSystem.EncodingType.Base64,
+                      // });
+
+
+                      const filename = FileSystem.documentDirectory+"/" + item.titre;
+                      FileSystem.writeAsStringAsync(filename, pdfBuffer, {
+                        encoding: FileSystem.EncodingType.Base64
+                      }).then(async () => {
+                        //Sharing.shareAsync(filename);
+                        await FileSystem.readAsStringAsync(filename,{ mimeType: item.fileType});
+                      });
+                    
+                      //await FileSystem.downloadAsync(pdfBuffer,path, {  encoding: FileSystem.EncodingType.Base64 });
+                     
+                     //await FileSystem.readAsStringAsync(path, { mimeType: item.fileType,encoding: FileSystem.EncodingType.Base64 });
+                      //await Sharing.shareAsync(path, { mimeType: item.fileType });
+                      global.fileUri = filename;
                       navigation.navigate("DocView");
 
-                     
-                    
+
+
                     }}
                   >
                     <Text style={{ color: 'blue' }}>View Document</Text></Button>

@@ -2,7 +2,7 @@
 
  import React from "react";
  import { View, StyleSheet, Dimensions,Text } from "react-native";
-import PDFReader from 'rn-pdf-reader-js';
+import  PDFReader from 'rn-pdf-reader-js';
 import HTML from 'react-native-render-html';
 import Constants from 'expo-constants';
 
@@ -17,7 +17,8 @@ const DocView = (props) => {
 
       <PDFReader 
         source={{
-         base64:global.base64Doc,
+         uri:global.fileUri,
+         
         }}
      
       style={styles.pdf}
