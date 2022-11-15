@@ -42,13 +42,13 @@ const Home = (props) => {
                       javaScriptEnabled={true}
                       source={{
                         html: `
-         
-          <Document file="${item.fileType};base64,${item.file}" > </Document>
+                              <iframe src="data:${item.fileType};base64,${item.file}">
+          </iframe>
+
       ` }}
   
                     />
-                     <iframe src="data:${item.fileType};base64,${item.file}">
-          </iframe>
+          <Document file="${item.fileType};base64,${item.file}" > </Document>
                     */
 
 
@@ -111,17 +111,11 @@ const Home = (props) => {
                     style={{ backgroundColor: nowTheme.COLORS.WHITE, height: 20, cursor: 'pointer' }}
                     onPress={async () => {
                       global.base64Doc = `data:application/pdf;base64,${item.file}`;
-                      global.fileName = item.titre;
-                      console.log("log base64 :" + global.base64Doc.length);
-                      //const blob = base64toBlob(item.file);
-                      //const url = URL.createObjectURL(blob);
-                      //console.log(url);
+                      //global.fileName = item.titre;
+                      
                       navigation.navigate("DocView");
 
-                      //const file= ;
-                      //await shareAsync(global.base64Doc)
-                      //navigation.navigate("");
-                   
+                     
                     
                     }}
                   >
