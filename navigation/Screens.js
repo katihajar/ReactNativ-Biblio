@@ -21,6 +21,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import FormDoc from '../screens/FormDoc';
+import DocView from '../screens/DocView';
 
 const { width } = Dimensions.get('screen');
 
@@ -275,6 +276,7 @@ export default function OnboardingStack(props) {
       <Stack.Screen name="Account" component={Register} />
       <Stack.Screen name="App" component={AppStack} />
       <Stack.Screen name="Articles" component={ArticlesStack} />
+      <Stack.Screen name="DocView" component={DocView} />
     </Stack.Navigator>
   );
 }
